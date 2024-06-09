@@ -1,7 +1,9 @@
 #include <iostream>
 #include <math.h>
-
 using namespace std;
+
+//Agregar tipos de caracter por columna fija
+int tipo1[7] = {1,1,1,1,1,1,1};
 
 // 385 arreglos de 5  (77x5)
 // 77 matrices de 5x7
