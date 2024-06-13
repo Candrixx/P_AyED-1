@@ -1,18 +1,9 @@
 #include <iostream>
-#include <math.h>
 using namespace std;
-//Agregar tipos de caracter por columna y fila fija
-int tipo_0[12] = {1,0,0,1,0,0,1,1,0,1,0,1}, tipo_1[12] = {1,0,0,1,0,0,1,1,1,1,1,0}, tipo_2[12] = {1,0,0,1,0,0,1,0,1,1,1,0}, tipo_3[12] = {1,0,0,1,0,0,1,0,1,1,1,1}, tipo_4[12] = {1,0,0,1,0,0,1,1,0,1,1,1}, tipo_5[12] = {1,1,1,1,1,1,1,0,0,1,0,0}, tipo_6[12] = {1,0,0,0,1,0,1,0,0,0,1,0}, tipo_7[12] = {1,0,0,0,0,0,1,1,0,0,0,0}, tipo_8[12] = {1,0,0,0,0,0,1,1,0,0,0,1}, tipo_9[12] = {1,0,0,0,0,0,1,0,0,0,1,0};
-int tipo_10[12] = {1,0,0,1,0,0,1,0,0,1,0,0}, tipo_11[12] = {0,0,0,0,0,0,1,0,0,0,0,0}, tipo_12[12] = {0,0,0,0,0,0,1,1,0,0,0,1}, tipo_13[12] = {0,0,1,1,0,0,0,1,0,1,0,1}, tipo_14[12] = {0,0,1,0,0,0,1,1,0,0,0,0}, tipo_15[12] = {0,0,0,1,0,0,0,0,0,1,0,0}, tipo_16[12] = {0,1,1,1,1,1,1,0,1,1,1,0}, tipo_17[12] = {0,0,0,0,1,1,1,0,1,0,1,0}, tipo_18[12] = {1,1,1,1,1,1,0,0,0,1,0,0}, tipo_19[12] = {1,0,1,0,0,0,1,0,0,0,1,0};
-int tipo_20[12] = {0,1,0,0,1,0,0,1,0,0,1,0}, tipo_21[12] = {1,0,1,0,0,0,1,0,0,0,0,1}, tipo_22[12] = {1,0,0,1,0,0,0,0,0,1,0,0}, tipo_23[12] = {0,1,1,0,1,1,0,0,0,0,0,0}, tipo_24[12] = {0,1,0,0,0,1,0,1,0,0,0,0}, tipo_25[12] = {0,0,1,0,1,0,0,0,0,0,0,0}, tipo_26[12] = {0,1,0,0,0,1,0,0,0,0,0,1}, tipo_27[12] = {1,0,0,1,1,1,1,0,1,1,0,1}, tipo_28[12] = {1,0,0,0,1,0,0,1,0,0,0,1}, tipo_29[12] = {1,0,0,1,0,0,0,1,1,1,1,0};
-int tipo_30[12] = {0,0,0,1,0,0,0,1,1,1,1,1}, tipo_31[12] = {0,0,1,0,1,0,0,1,1,0,0,0}, tipo_32[12] = {0,0,0,0,0,0,1,1,0,0,0,0}, tipo_33[12] = {0,0,0,1,0,0,0,1,0,1,0,1}, tipo_34[12] = {1,0,0,0,1,0,1,1,0,0,0,1}, tipo_35[12] = {1,0,0,1,1,0,0,1,1,1,1,0}, tipo_36[12] = {0,0,0,1,1,1,0,1,0,1,0,1}, tipo_37[12] = {1,0,0,0,0,0,1,0,1,0,0,0}, tipo_38[12] = {0,0,1,0,1,0,1,0,0,0,0,1}, tipo_39[12] = {0,0,0,1,0,0,1,1,1,1,1,0}; 
-int tipo_40[12] = {0,0,1,0,0,0,1,1,0,0,0,0}, tipo_41[12] = {0,0,0,1,0,0,1,0,1,1,1,1}, tipo_42[12] = {0,0,1,0,1,0,1,1,0,0,0,1}, tipo_43[12] = {0,0,0,1,0,0,0,1,1,1,1,0}, tipo_44[12] = {0,1,0,1,1,1,1,0,0,1,0,0}, tipo_45[12] = {0,0,0,0,0,0,1,0,0,0,1,0}, tipo_46[12] = {0,0,0,0,1,0,0,0,1,0,1,0}, tipo_47[12] = {0,0,0,1,1,0,0,1,0,1,0,1}, tipo_48[12] = {0,0,1,0,0,0,0,1,1,0,0,1}, tipo_49[12] = {0,0,1,0,0,0,1,1,0,0,0,1};
-int tipo_50[12] = {0,0,1,0,1,0,0,1,0,0,0,1}, tipo_51[12] = {0,0,1,0,1,0,1,1,0,0,0,0}, tipo_52[12] = {0,0,0,0,1,1,0,1,0,0,0,1}, tipo_53[12] = {0,0,0,0,1,1,0,0,1,0,1,0}, tipo_54[12] = {0,0,1,0,1,0,1,0,0,0,1,0}, tipo_55[12] = {1,0,0,0,0,0,1,0,0,0,0,1}; 
 
-//Los caracteres asociados a cada fila de la matriz de 77x35
+int tipo_rand[12]={1,0,0,0,0,0,1,0,0,0,0,1};
+
 char car[77]={'0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','[','/',']','_','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','{','|','}','-'};
-// 385 arreglos de 5  (77x5)
-// 77 matrices de 5x7
 int characters[77][35]{
 0, 1, 1, 1, 0,
 1, 0, 0, 0, 1,
@@ -652,61 +643,47 @@ int characters[77][35]{
 1, 1, 1, 1, 1
 };
 
-class Segmentos{
-    public:
-    //Segmentos de los paquetes de 3x6
-    int seg[6];
+bool compararCol(int a[][35], int tipo[], int index[], int filaM){
+    int count=0;
+    bool prueba = true;
+    for(int j=2; j<35; j+=5){
+        if(a[filaM][j]!=tipo[count]) return false;
+        count++;
+    }
+    return true;
+}    
 
-    Segmentos(){
-        for(int i=0; i<35; i++){
-            seg[i] = 0;
+bool compararFil(int a[][35], int tipo[], int index[], int filaM){
+    int count=7;
+    bool prueba = true;
+    for(int j=15; j<20; j++){
+        if(a[filaM][j]!=tipo[count]) return false;
+        count++;
+    }
+    return true;
+}
+
+int compararTipo(int a[][35], int tipo[], int index[]){
+    int count=0;
+    for(int i=0; i<77; i++){
+        if(compararCol(a,tipo, index, i)&&compararFil(a,tipo, index, i)){
+            index[count] = i;
+            count++;
         }
     }
-
-};
-
-class Character{
-public:
-    //Paquete de 7x5 en un arreglo de 35
-    int pack[35];
-
-    //Caracter asociado al paquete
-    char c;
-    //Tipo por columna y fila fija
-    int type;
+    return count;
     
-    Character(){
-        for(int i=0; i<35; i++){
-            pack[i] = 0;
-        }
-        c = '.';
-        type = -1;
-    }
-    //Compara la fila fija con un tipo
-    bool compareFil(int type[]){
-        int count=7; 
-        for(int i=15; i<20; i++){
-            if(pack[i]!=type[count]) return false;
-        }
-        return true;
-    }
-    //Compara la columna fija con un tipo
-    bool compareCol(int type[]){
-        int count=0; 
-        for(int i=2; i<35; i+=5){
-            if(pack[i]!=type[count]) return false;
-        }
-        return true;
-    }
-    //Asigna tipo al paquete
-    void asignType(int type[], int i){
-        if(compareCol(type)&&compareFil(type)) this->type=i;
-    }
-
-};
-
+}
 
 int main(){
-
+    int indice[10];
+     for(int i=0; i<10; i++){
+        indice[i] = -1;
+    }
+    int cant_tipo = compararTipo(characters, tipo_rand, indice);
+    for(int i=0; i<10; i++){
+        if(indice[i]<0) break;
+        cout<<car[indice[i]]<<" ";
+    }
     return 0;
 }
