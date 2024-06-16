@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 using namespace std;
+int sizeInt = 500;
 //Agregar tipos de caracter por columna y fila fija
 int tipo_0[12] = {1,0,0,1,0,0,1,1,0,1,0,1}, tipo_1[12] = {1,0,0,1,0,0,1,1,1,1,1,0}, tipo_2[12] = {1,0,0,1,0,0,1,0,1,1,1,0}, tipo_3[12] = {1,0,0,1,0,0,1,0,1,1,1,1}, tipo_4[12] = {1,0,0,1,0,0,1,1,0,1,1,1}, tipo_5[12] = {1,1,1,1,1,1,1,0,0,1,0,0}, tipo_6[12] = {1,0,0,0,1,0,1,0,0,0,1,0}, tipo_7[12] = {1,0,0,0,0,0,1,1,0,0,0,0}, tipo_8[12] = {1,0,0,0,0,0,1,1,0,0,0,1}, tipo_9[12] = {1,0,0,0,0,0,1,0,0,0,1,0};
 int tipo_10[12] = {1,0,0,1,0,0,1,0,0,1,0,0}, tipo_11[12] = {0,0,0,0,0,0,1,0,0,0,0,0}, tipo_12[12] = {0,0,0,0,0,0,1,1,0,0,0,1}, tipo_13[12] = {0,0,1,1,0,0,0,1,0,1,0,1}, tipo_14[12] = {0,0,1,0,0,0,1,1,0,0,0,0}, tipo_15[12] = {0,0,0,1,0,0,0,0,0,1,0,0}, tipo_16[12] = {0,1,1,1,1,1,1,0,1,1,1,0}, tipo_17[12] = {0,0,0,0,1,1,1,0,1,0,1,0}, tipo_18[12] = {1,1,1,1,1,1,0,0,0,1,0,0}, tipo_19[12] = {1,0,1,0,0,0,1,0,0,0,1,0};
@@ -656,11 +657,13 @@ class Segmentos{
     public:
     //Segmentos de los paquetes de 3x6
     int seg[6];
+    int type;
 
     Segmentos(){
         for(int i=0; i<35; i++){
             seg[i] = 0;
         }
+        type = -1;
     }
 
 };
@@ -681,12 +684,13 @@ public:
         }
         c = '.';
         type = -1;
-    }
+    }  
     //Compara la fila fija con un tipo
     bool compareFil(int type[]){
         int count=7; 
         for(int i=15; i<20; i++){
             if(pack[i]!=type[count]) return false;
+            count++;
         }
         return true;
     }
@@ -695,18 +699,185 @@ public:
         int count=0; 
         for(int i=2; i<35; i+=5){
             if(pack[i]!=type[count]) return false;
+            count++;
         }
         return true;
     }
     //Asigna tipo al paquete
-    void asignType(int type[], int i){
-        if(compareCol(type)&&compareFil(type)) this->type=i;
+    bool asignType(int type[], int tipo){
+        bool seAsigno=false;
+        if(compareCol(type)&&compareFil(type)){
+            this->type=tipo;
+            seAsigno = true;
+        } 
+        return seAsigno;
     }
-
+    //Llenar
+    //>Funcion para llenar de la matriz de caracteres y asignar el caracter correspondiente
+    void llenarChar(int matriz[][35], int charActual){
+        for(int i=0; i<35; i++){
+            pack[i] = matriz[charActual][i];
+        }
+        c = car[charActual];
+    }
+    //Imprime la matriz de 7x5 del char para fines de verificacion
+    void printChar(){
+        int count=0;
+        for(int i=0; i<35; i++){
+            cout<<pack[i];
+            count++;
+            if(count==5){
+                cout<<endl;
+                count=0;
+            }
+        }
+    }
 };
 
+//Llena el diccionario
+void llenarDic(int matriz[][35], Character c[]){
+    for(int i=0; i<77; i++){
+        c[i].llenarChar(matriz, i);
+    }
+}
+
+//Asigna tipo al caracter
+void asignType(Character c[], int size){
+    for(int i=0; i<size; i++){
+        for(int j=0; j<56; j++){
+            bool seAsigno=false;
+            switch(j){
+            case 0: if(c[i].asignType(tipo_0, j)) seAsigno=true;
+            break;
+            case 1: if(c[i].asignType(tipo_1, j)) seAsigno=true;
+            break;
+            case 2: if(c[i].asignType(tipo_2, j)) seAsigno=true;
+            break;
+            case 3: if(c[i].asignType(tipo_3, j)) seAsigno=true;
+            break;
+            case 4: if(c[i].asignType(tipo_4, j)) seAsigno=true;
+            break;
+            case 5: if(c[i].asignType(tipo_5, j)) seAsigno=true;
+            break;
+            case 6: if(c[i].asignType(tipo_6, j)) seAsigno=true;
+            break;
+            case 7: if(c[i].asignType(tipo_7, j)) seAsigno=true;
+            break;
+            case 8: if(c[i].asignType(tipo_8, j)) seAsigno=true;
+            break;
+            case 9: if(c[i].asignType(tipo_9, j)) seAsigno=true;
+            break;
+            case 10: if(c[i].asignType(tipo_10, j)) seAsigno=true;
+            break;
+            case 11: if(c[i].asignType(tipo_11, j)) seAsigno=true;
+            break;
+            case 12: if(c[i].asignType(tipo_12, j)) seAsigno=true;
+            break;
+            case 13: if(c[i].asignType(tipo_13, j)) seAsigno=true;
+            break;
+            case 14: if(c[i].asignType(tipo_14, j)) seAsigno=true;
+            break;
+            case 15: if(c[i].asignType(tipo_15, j)) seAsigno=true;
+            break;
+            case 16: if(c[i].asignType(tipo_16, j)) seAsigno=true;
+            break;
+            case 17: if(c[i].asignType(tipo_17, j)) seAsigno=true;
+            break;
+            case 18: if(c[i].asignType(tipo_18, j)) seAsigno=true;
+            break;
+            case 19: if(c[i].asignType(tipo_19, j)) seAsigno=true;
+            break;
+            case 20: if(c[i].asignType(tipo_20, j)) seAsigno=true;
+            break;
+            case 21: if(c[i].asignType(tipo_21, j)) seAsigno=true;
+            break;
+            case 22: if(c[i].asignType(tipo_22, j)) seAsigno=true;
+            break;
+            case 23: if(c[i].asignType(tipo_23, j)) seAsigno=true;
+            break;
+            case 24: if(c[i].asignType(tipo_24, j)) seAsigno=true;
+            break;
+            case 25: if(c[i].asignType(tipo_25, j)) seAsigno=true;
+            break;
+            case 26: if(c[i].asignType(tipo_26, j)) seAsigno=true;
+            break;
+            case 27: if(c[i].asignType(tipo_27, j)) seAsigno=true;
+            break;
+            case 28: if(c[i].asignType(tipo_28, j)) seAsigno=true;
+            break;
+            case 29: if(c[i].asignType(tipo_29, j)) seAsigno=true;
+            break;
+            case 30: if(c[i].asignType(tipo_30, j)) seAsigno=true;
+            break;
+            case 31: if(c[i].asignType(tipo_31, j)) seAsigno=true;
+            break;
+            case 32: if(c[i].asignType(tipo_32, j)) seAsigno=true;
+            break;
+            case 33: if(c[i].asignType(tipo_33, j)) seAsigno=true;
+            break;
+            case 34: if(c[i].asignType(tipo_34, j)) seAsigno=true;
+            break;
+            case 35: if(c[i].asignType(tipo_35, j)) seAsigno=true;
+            break;
+            case 36: if(c[i].asignType(tipo_36, j)) seAsigno=true;
+            break;
+            case 37: if(c[i].asignType(tipo_37, j)) seAsigno=true;
+            break;
+            case 38: if(c[i].asignType(tipo_38, j)) seAsigno=true;
+            break;
+            case 39: if(c[i].asignType(tipo_39, j)) seAsigno=true;
+            break;
+            case 40: if(c[i].asignType(tipo_40, j)) seAsigno=true;
+            break;
+            case 41: if(c[i].asignType(tipo_41, j)) seAsigno=true;
+            break;
+            case 42: if(c[i].asignType(tipo_42, j)) seAsigno=true;
+            break;
+            case 43: if(c[i].asignType(tipo_43, j)) seAsigno=true;
+            break;
+            case 44: if(c[i].asignType(tipo_44, j)) seAsigno=true;
+            break;
+            case 45: if(c[i].asignType(tipo_45, j)) seAsigno=true;
+            break;
+            case 46: if(c[i].asignType(tipo_46, j)) seAsigno=true;
+            break;
+            case 47: if(c[i].asignType(tipo_47, j)) seAsigno=true;
+            break;
+            case 48: if(c[i].asignType(tipo_48, j)) seAsigno=true;
+            break;
+            case 49: if(c[i].asignType(tipo_49, j)) seAsigno=true;
+            break;
+            case 50: if(c[i].asignType(tipo_50, j)) seAsigno=true;
+            break;
+            case 51: if(c[i].asignType(tipo_51, j)) seAsigno=true;
+            break;
+            case 52: if(c[i].asignType(tipo_52, j)) seAsigno=true;
+            break;
+            case 53: if(c[i].asignType(tipo_53, j)) seAsigno=true;
+            break;
+            case 54: if(c[i].asignType(tipo_54, j)) seAsigno=true;
+            break;
+            case 55: if(c[i].asignType(tipo_55, j)) seAsigno=true;
+            break;
+            default: c[i].c = ' ';
+            break;
+            }
+            if(seAsigno) break;
+        }
+    }
+}
 
 int main(){
-
+    //Los caracteres para comparar en formato clase
+    Character dictionary[77];
+    llenarDic(characters, dictionary);
+    asignType(dictionary, 77);
+    //caracteres que entraran por consola
+    Character interByConsol[sizeInt];    
+    for(int i=0; i<77; i++){
+        cout<<dictionary[i].c<<" "<< dictionary[i].type<<endl;;
+        dictionary[i].printChar();
+        cout<<endl;
+    }
     return 0;
 }
