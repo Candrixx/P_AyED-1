@@ -665,6 +665,25 @@ class Segmentos{
         }
         type = -1;
     }
+    //llenar segmento
+    void llenarSeg(int aux[]){
+        for(int i=0; i<6; i++){
+            seg[i] = aux[i];
+        }
+    }
+    //Imprime segmento
+    void printSeg(){
+        int count=0;
+        for(int i=0; i<6; i++){
+            cout<<seg[i];
+            count++;
+            if(count==2){
+                cout<<endl;
+                count=0;
+            }
+        }
+        cout<<endl;
+    }
 
 };
 
@@ -675,6 +694,7 @@ public:
 
     //Caracter asociado al paquete
     char c;
+
     //Tipo por columna y fila fija
     int type;
     
@@ -712,7 +732,21 @@ public:
         } 
         return seAsigno;
     }
-    //Llenar
+    //Llenar Pack de 35
+    void llenarPack(int array[]){
+        for(int i=0; i<35; i++){
+            pack[i] = array[i];
+        }
+    }
+    //Asignar segmentos
+    void assignSeg(int aux[], int indexOne, int indexTwo, int indexThree, int indexFour, int indexFive, int indexSix){
+        aux[0] = pack[indexOne];
+        aux[1] = pack[indexTwo];
+        aux[2] = pack[indexThree];
+        aux[3] = pack[indexFour];
+        aux[4] = pack[indexFive];
+        aux[5] = pack[indexSix];
+    }
     //>Funcion para llenar de la matriz de caracteres y asignar el caracter correspondiente
     void llenarChar(int matriz[][35], int charActual){
         for(int i=0; i<35; i++){
@@ -867,17 +901,78 @@ void asignType(Character c[], int size){
     }
 }
 
+//Asignar segmentos totales
+void assignSeg(Segmentos s[], Character c[], int sizeChar){
+    int aux[6];
+    int index=0;
+    int count=0;
+    for(int i=0; i<sizeChar; i++){
+        //Segmento arriba a la izquierda
+       c[i].assignSeg(aux, 0,1,5,6,10,11);
+       s[count].llenarSeg(aux);
+       count++;
+       //Segmento Arriba a la derecha
+       c[i].assignSeg(aux,3,4,8,9,13,14);
+       s[count].llenarSeg(aux);
+       count++;
+       //Segmento abajo a la izquierda
+       c[i].assignSeg(aux, 20,21,25,26,30,31);
+       s[count].llenarSeg(aux);
+       count++;
+       //Segmento abajo a la derecha
+       c[i].assignSeg(aux,23,24,28,29,33,34);
+       s[count].llenarSeg(aux);
+       count++;
+    }
+}
+
+//Lenar caracteres entrados por consola
+int llenarChar( Character c[], int casoPrueba[], int size){
+    int aux[35];
+    int j=0;
+    int count=0;
+    for(int i=0; i<size; i++){
+        aux[j] = casoPrueba[i];
+        j++;
+        if(j==35){
+            c[count].llenarPack(aux);
+            j=0;
+            count++;
+        }
+        
+    }
+    return count;
+}
+
 int main(){
     //Los caracteres para comparar en formato clase
     Character dictionary[77];
     llenarDic(characters, dictionary);
     asignType(dictionary, 77);
     //caracteres que entraran por consola
-    Character interByConsol[sizeInt];    
-    for(int i=0; i<77; i++){
-        cout<<dictionary[i].c<<" "<< dictionary[i].type<<endl;;
-        dictionary[i].printChar();
-        cout<<endl;
-    }
+    Character interByConsol[sizeInt];  
+
+    //Segmentos de los caracteres entrados por consola
+    Segmentos *segmentos; 
+    
+    //Caso de prueba sustento a cambios
+    int casoprueba[910]={0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,1,0,1,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,1,1,1,0,1,1,1,0,0,1,0,0,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,1,0,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,1,1,1,1,0,1,0,0,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,1,1,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,1,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0,1,1,0,0,1,0,0,0,1,1,0,0,1,0,1,0,1,0,0,1,1,0,0,0,1,0,1,0,0,1,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,0,1,1,1,0,1,0,1,1,0,1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,0,0,1,1,0,1,0,1,1,0,0,1,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0,1,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,1,0,0,1,1,0,1,1,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,1,0,1,0,0,1,0,0,1,0,1,0,0,0,1,0,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,1,1,1,1,1,0,1,1,1,1,1,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,0,0,0,1,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,1,1,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,1,1,1,1};
+    
+    //Cantidad real de caracteres entrados por consola
+    int cantidadRealdeChar = llenarChar(interByConsol, casoprueba, 910);
+    //interByConsol[0].printChar();
+    //Cantidad de segmentos totales
+    segmentos = new Segmentos [cantidadRealdeChar*4];
+    assignSeg(segmentos, interByConsol, cantidadRealdeChar);
+    // segmentos[4].printSeg();
+    // segmentos[5].printSeg();
+    // segmentos[6].printSeg();
+    // segmentos[7].printSeg();
+    // for(int i=0; i<77; i++){
+    //     cout<<dictionary[i].c<<" "<< dictionary[i].type<<endl;;
+    //     dictionary[i].printChar();
+    //     cout<<endl;
+    // }
+    delete[]segmentos;
     return 0;
 }
