@@ -1,7 +1,7 @@
 #include <iostream>
 #include <math.h>
 using namespace std;
-int sizeInt = 500;
+int const sizeInt = 500;
 //Agregar tipos de caracter por columna y fila fija
 int tipo_0[12] = {1,0,0,1,0,0,1,1,0,1,0,1}, tipo_1[12] = {1,0,0,1,0,0,1,1,1,1,1,0}, tipo_2[12] = {1,0,0,1,0,0,1,0,1,1,1,0}, tipo_3[12] = {1,0,0,1,0,0,1,0,1,1,1,1}, tipo_4[12] = {1,0,0,1,0,0,1,1,0,1,1,1}, tipo_5[12] = {1,1,1,1,1,1,1,0,0,1,0,0}, tipo_6[12] = {1,0,0,0,1,0,1,0,0,0,1,0}, tipo_7[12] = {1,0,0,0,0,0,1,1,0,0,0,0}, tipo_8[12] = {1,0,0,0,0,0,1,1,0,0,0,1}, tipo_9[12] = {1,0,0,0,0,0,1,0,0,0,1,0};
 int tipo_10[12] = {1,0,0,1,0,0,1,0,0,1,0,0}, tipo_11[12] = {0,0,0,0,0,0,1,0,0,0,0,0}, tipo_12[12] = {0,0,0,0,0,0,1,1,0,0,0,1}, tipo_13[12] = {0,0,1,1,0,0,0,1,0,1,0,1}, tipo_14[12] = {0,0,1,0,0,0,1,1,0,0,0,0}, tipo_15[12] = {0,0,0,1,0,0,0,0,0,1,0,0}, tipo_16[12] = {0,1,1,1,1,1,1,0,1,1,1,0}, tipo_17[12] = {0,0,0,0,1,1,1,0,1,0,1,0}, tipo_18[12] = {1,1,1,1,1,1,0,0,0,1,0,0}, tipo_19[12] = {1,0,1,0,0,0,1,0,0,0,1,0};
@@ -653,23 +653,88 @@ int characters[77][35]{
 1, 1, 1, 1, 1
 };
 
+class Soluciones{
+public:
+    char sol[sizeInt];
+
+    Soluciones(){
+        for(int i=0; i<sizeInt; i++){
+            sol[i]='.';
+        }
+    }
+
+    //Comprueb si esta vacio
+    bool isEmpty(int n){
+        for(int i=0; i<n; i++){
+            if(sol[i]!='.') return false;
+        }
+        return true;
+    }
+
+    //Compara solucion con un arreglo de chgar
+    bool equals(char c[], int size){
+        for(int i=0; i<size; i++){
+            if(sol[i]!=c[i]) return false;
+        }
+        return true;
+    }
+
+    //LLena la solucion con un arreglo de char
+    void llenarSol(char c[], int size){
+        for(int i=0; i<size; i++){
+            sol[i] = c[i];
+        }
+    }
+};
 class Segmentos{
     public:
     //Segmentos de los paquetes de 3x6
     int seg[6];
-    int type;
+    
+    //Atributo para saber si cuadra con el tipo de caracter a comparar
+    bool isvalid;
+
+    //Posicion en el segmento
+    int pos;
 
     Segmentos(){
         for(int i=0; i<35; i++){
             seg[i] = 0;
         }
-        type = -1;
+        isvalid = false;
+        pos=0;
     }
     //llenar segmento
     void llenarSeg(int aux[]){
         for(int i=0; i<6; i++){
             seg[i] = aux[i];
         }
+    }
+
+    //Compara segmento con los 4 segmentos del caracter
+    bool compareSeg(int dictionaryPack[]){
+        //Compara segmento de arriba a la izquierda
+        if(seg[0]==dictionaryPack[0] && seg[1]==dictionaryPack[1] && seg[2]==dictionaryPack[5] && seg[3]==dictionaryPack[6] && seg[4]==dictionaryPack[10] && seg[5]==dictionaryPack[11]){
+            pos=1;
+            return true;
+        } 
+        //Compara segmento de arriba a la derecha
+        if(seg[0]==dictionaryPack[3] && seg[1]==dictionaryPack[4] && seg[2]==dictionaryPack[8] && seg[3]==dictionaryPack[9] && seg[4]==dictionaryPack[13] && seg[5]==dictionaryPack[14]){
+            pos=2;
+            return true;
+        } 
+        //Compara segmento abajo a la izquierda
+        if(seg[0]==dictionaryPack[20] && seg[1]==dictionaryPack[21] && seg[2]==dictionaryPack[25] && seg[3]==dictionaryPack[26] && seg[4]==dictionaryPack[30] && seg[5]==dictionaryPack[31]){
+            pos=3;
+            return true;
+        } 
+        //Compara segmeto abajo a la derecha
+        if(seg[0]==dictionaryPack[23] && seg[1]==dictionaryPack[24] && seg[2]==dictionaryPack[28] && seg[3]==dictionaryPack[29] && seg[4]==dictionaryPack[33] && seg[5]==dictionaryPack[34]){
+            pos=4;
+            return true;
+        } 
+
+        return false;
     }
     //Imprime segmento
     void printSeg(){
@@ -731,6 +796,13 @@ public:
             seAsigno = true;
         } 
         return seAsigno;
+    }
+    //Comparar concordancia total con los dos arreglos de 35
+    bool compareChar(int c[]){
+        for(int i=0; i<35; i++){
+            if(pack[i]!=c[i]) return false;
+        }
+        return true;
     }
     //Llenar Pack de 35
     void llenarPack(int array[]){
@@ -944,7 +1016,178 @@ int llenarChar( Character c[], int casoPrueba[], int size){
     return count;
 }
 
+//Compara un caracter con el diccionario para saber si concuerda
+bool compareDictionary(Character c, Character dictionary[], int &indexDic){
+    for(int i=0; i<77; i++){
+        //Verifico si son del mismo tipo
+        if(c.type==dictionary[i].type){
+            if(c.compareChar(dictionary[i].pack)){
+                indexDic = i;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+//Verifica los segmentos validos a permutar 
+void segValids(Segmentos s[], Character dictionary[], int typeChar, int sizeSeg){
+    for(int i=0; i<sizeSeg; i++){
+        for(int j=0; j<77; j++){
+            if(dictionary[j].type==typeChar){
+                //Comparo segmeto con los segmentos del caracter del diccionario
+                if(s[i].compareSeg(dictionary[j].pack)){
+                    s[i].isvalid = true;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+//Asigna el segmento al character
+void asignSegAChar(int charPack[], int seg[], int indexOne, int indexTwo, int indexThree, int indexFour, int indexFive, int indexSix){
+    charPack[indexOne] = seg[0];
+    charPack[indexTwo] = seg[1];
+    charPack[indexThree] = seg[2];
+    charPack[indexFour] = seg[3];
+    charPack[indexFive] = seg[4];
+    charPack[indexSix] = seg[5];
+}
+
+//Verificar la cantidad de concordancias
+int contarConcordancias(Character c, Character dictionary[]){
+    int count=0;
+    for(int i=0; i<77; i++){
+        if(c.type==dictionary[i].type){
+            count++;
+        }
+    }
+    return count;
+}
+
+//Me reinica todos los segmentos en falso para un nnuevo caracter
+void reiniciarSegValid(Segmentos s[], int size){
+    for(int i=0; i<size; i++){
+        s[i].isvalid = false;
+        s[i].pos = 0;
+    }
+}
+
+//Verifica si ya se encuentra en el arreglo
+bool isthere(char caracters[], int size, char c){
+    for(int i=0; i<size; i++){
+        if(caracters[i]==c) return true;
+    }
+    return false;
+}
+
+//Permutara los segmentos totales con los caracteres a evaluar
+bool permSegmentos(Character c, Character dictionary[], Segmentos s[], char array[], int sizeChar, int sizeSeg, char &ultimoChar, char &penultimoChar, char &antepenultimoChar, char &anterioratodos, int &segAI, int &segAD, int &segai, int &segad, bool &seEncontro, int charActual=0, int segAsignados=0, int indexDic=-1, int cantConcuerdan=0){
+    //Comparo el caracter con los del diccionario
+    if(compareDictionary(c, dictionary, indexDic)){
+        cantConcuerdan = contarConcordancias(c, dictionary);
+        if(cantConcuerdan==1){
+            c.c = dictionary[indexDic].c;
+        }
+        if(!isthere(array, sizeChar, dictionary[indexDic].c) && ultimoChar!=dictionary[indexDic].c && penultimoChar!=dictionary[indexDic].c && antepenultimoChar!=dictionary[indexDic].c && anterioratodos!=dictionary[indexDic].c){
+            array[charActual] = dictionary[indexDic].c;
+            seEncontro=true;
+            ultimoChar = dictionary[indexDic].c;
+            return seEncontro;
+        }
+    }
+    segValids(s, dictionary, c.type, sizeSeg);
+        for(int j=0; j<sizeSeg; j++){
+            //Comprueno si tiene caracter asociado y en caso de tener significa que solo tiene una unica concodancia en tipo
+            if(c.c!='.') break;
+            if(seEncontro) break;
+            //Asigno segmento de arriba a la izquierda
+            if(s[j].isvalid &&  segAsignados==0){
+                asignSegAChar(c.pack, s[j].seg, 0,1,5,6,10,11);
+                permSegmentos(c, dictionary, s, array, sizeChar, sizeSeg, ultimoChar, penultimoChar, antepenultimoChar, anterioratodos, j, segAD, segai, segad, seEncontro, charActual, 1, indexDic, cantConcuerdan);
+            }
+            //Asigno segmento de arriba a la derecha
+            if(s[j].isvalid && segAsignados==1 && j!=segAI){
+                asignSegAChar(c.pack, s[j].seg, 3,4,8,9,13,14);
+                permSegmentos(c, dictionary, s, array, sizeChar, sizeSeg, ultimoChar, penultimoChar, antepenultimoChar, anterioratodos, segAI, j, segai, segad, seEncontro, charActual, 2, indexDic, cantConcuerdan);
+            }
+            //Asigno segmento de abajo a la izquierda
+            if(s[j].isvalid && segAsignados==2 && j!=segAI && j!=segAD){
+                asignSegAChar(c.pack, s[j].seg, 20,21,25,26,30,31);
+                permSegmentos(c, dictionary, s, array, sizeChar, sizeSeg, ultimoChar, penultimoChar, antepenultimoChar, anterioratodos, segAI, segAD, j, segad, seEncontro, charActual, 3, indexDic, cantConcuerdan);
+            }
+            //Asigno segmento de abajo a la derecha
+            if(s[j].isvalid && segAsignados==3 && j!=segAI && j!=segAD && j!=segai){
+                asignSegAChar(c.pack, s[j].seg, 23,24,28,29,33,34);
+                permSegmentos(c, dictionary, s, array, sizeChar, sizeSeg, ultimoChar, penultimoChar, antepenultimoChar, anterioratodos, segAI, segAD, segai, j, seEncontro, charActual, 4, indexDic, cantConcuerdan);
+            }
+        }
+    if(!seEncontro) return false;
+    return seEncontro;
+}
+
+//Saber si la solucion encontrada ya fue encontrada
+bool isthereInSolucions(Soluciones s[], char array[], int size){
+    for(int i=1 ; i<sizeInt; i++){
+        if(s[i].isEmpty(size)) break;
+        if(s[i].equals(array, size)) return true;
+    }
+    return false;
+}
+
+//Imprime un arreglo de caracteres
+void printArrayChar(char c[], int size){
+    for(int i=0; i<size; i++){
+        cout<<c[i];
+    }
+    cout<<endl;
+}
+
+//Permuta los caracteres
+void permChar(Character c[], Character dictionary[], Segmentos s[], Soluciones sol[], char array[], int sizeChar, int sizeSeg, int &indexSol, int charActual=0){
+    if(charActual>=sizeChar && !isthereInSolucions(sol, array, sizeChar)){
+        printArrayChar(array, sizeChar);
+        sol[indexSol].llenarSol(array, sizeChar);
+        indexSol++;
+        return;
+    }
+    int segAI=-1;
+    int segAD=-1;
+    int segai=-1;
+    int segad=-1;
+    char ultimoChar='.'; char penultimoChar='.'; char antepenultimoChar='.'; char anterioratodos='.';
+    bool seEncontro=false;
+   for(int i=0; i<5; i++){
+        if(permSegmentos(c[charActual], dictionary, s, array, sizeChar, sizeSeg, ultimoChar, penultimoChar, antepenultimoChar, anterioratodos, segAI, segAD, segai, segad, seEncontro, charActual)){
+            permChar(c, dictionary, s, sol, array, sizeChar, sizeSeg, indexSol, charActual+1);
+            seEncontro = false;
+            array[charActual] = '.';
+        }
+        if(i==1) penultimoChar = ultimoChar;
+        if(i==2){
+            int aux = penultimoChar;
+            penultimoChar = ultimoChar;
+            antepenultimoChar = aux;
+        }
+        if(i==3){
+            int aux1 = penultimoChar;
+            int aux2 = antepenultimoChar;
+            penultimoChar = ultimoChar;
+            antepenultimoChar = aux1;
+            anterioratodos = aux2;
+        }
+   }
+    
+}
+
 int main(){
+    //Indice del arreglo de soluciones
+    int indexSol=1;
+
+    //Arreglo de caracteres para imprimir
+    char *arrayChar;
+
     //Los caracteres para comparar en formato clase
     Character dictionary[77];
     llenarDic(characters, dictionary);
@@ -956,23 +1199,24 @@ int main(){
     Segmentos *segmentos; 
     
     //Caso de prueba sustento a cambios
-    int casoprueba[910]={0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,1,0,1,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,1,1,1,0,1,1,1,0,0,1,0,0,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,1,0,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,1,1,1,1,0,1,0,0,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,1,1,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,1,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0,1,1,0,0,1,0,0,0,1,1,0,0,1,0,1,0,1,0,0,1,1,0,0,0,1,0,1,0,0,1,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,0,1,1,1,0,1,0,1,1,0,1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1,0,0,1,1,0,1,0,1,1,0,0,1,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0,1,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,1,0,0,1,1,0,1,1,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,1,0,1,0,0,1,0,0,1,0,1,0,0,0,1,0,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,1,1,1,1,1,0,1,1,1,1,1,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,0,0,0,1,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,1,1,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,1,1,1,1};
+    int casoprueba[140]={0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0};
     
     //Cantidad real de caracteres entrados por consola
-    int cantidadRealdeChar = llenarChar(interByConsol, casoprueba, 910);
-    //interByConsol[0].printChar();
+    int cantidadRealdeChar = llenarChar(interByConsol, casoprueba, 140);
+    asignType(interByConsol, cantidadRealdeChar);
+
+    //Arreglo de soluciones para no repetirlas
+    Soluciones soluciones[sizeInt];
+
+    //Arreglo que se va a imprimir
+    arrayChar = new char [cantidadRealdeChar];
+
     //Cantidad de segmentos totales
     segmentos = new Segmentos [cantidadRealdeChar*4];
     assignSeg(segmentos, interByConsol, cantidadRealdeChar);
-    // segmentos[4].printSeg();
-    // segmentos[5].printSeg();
-    // segmentos[6].printSeg();
-    // segmentos[7].printSeg();
-    // for(int i=0; i<77; i++){
-    //     cout<<dictionary[i].c<<" "<< dictionary[i].type<<endl;;
-    //     dictionary[i].printChar();
-    //     cout<<endl;
-    // }
+    permChar(interByConsol, dictionary, segmentos, soluciones, arrayChar, cantidadRealdeChar, cantidadRealdeChar*4, indexSol);
+    
+    delete[]arrayChar;
     delete[]segmentos;
     return 0;
 }
